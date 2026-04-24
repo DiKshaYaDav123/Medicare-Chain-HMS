@@ -168,8 +168,8 @@ https://your-demo-link.com
 ## 👤 Patient Dashboard
 ![Patient Dashboard](screenshots/patient-dashboard.png)
 
-### 📅 Appointments
-![Appointments](screenshots/appointments.png)
+### 📅 My Appointments
+![My Appointments](screenshots/my-appointments.png)
 
 ### 📄 Reports
 ![Reports](screenshots/reports.png)
