@@ -158,14 +158,21 @@ https://your-demo-link.com
 
 ---
 
-## 📸 Screenshots (Recommended)
+## 📸 Screenshots
 
-```
-/screenshots/home.png
-/screenshots/dashboard.png
-/screenshots/appointments.png
-/screenshots/reports.png
-```
+## 📸 Screenshots
+
+### 🏠 Home Page
+![Home](screenshots/home-hero.png)
+
+### 👤 Dashboard
+![Dashboard](screenshots/dashboard.png)
+
+### 📅 Appointments
+![Appointments](screenshots/appointments.png)
+
+### 📄 Reports
+![Reports](screenshots/reports.png)
 
 ---
 
