@@ -7,8 +7,9 @@ import {
   BadgeIndianRupee,
   FileText,
   Phone,
+  CalendarDays,
+  UserRound,
 } from "lucide-react";
-import { dashboardStyles } from "../assets/dummyStyles";
 
 const API_BASE = "http://localhost:4000";
 
@@ -235,48 +236,70 @@ export default function DashboardPage() {
   };
 
   return (
-    <div className={dashboardStyles.pageContainer}>
-      <div className={dashboardStyles.contentWrapper}>
-        <h1 className={dashboardStyles.headerTitle}>Doctor Dashboard</h1>
+    <div className="min-h-screen bg-slate-50 px-3 py-4">
+      <div className="mx-auto max-w-7xl">
+        <div className="mb-4 rounded-xl bg-white px-5 py-4 shadow-sm border border-slate-200">
+          <h1 className="text-2xl md:text-3xl font-bold text-slate-800">
+            Doctor Dashboard
+          </h1>
+          <p className="text-sm text-slate-500 mt-1">
+            Manage appointments and view patient history
+          </p>
+        </div>
 
         {error ? (
-          <div className="mb-4 rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-red-700">
+          <div className="mb-3 rounded-lg border border-red-200 bg-red-50 px-4 py-2 text-sm text-red-700">
             {error}
           </div>
         ) : null}
 
         {!doctorId ? (
-          <div className="mb-4 rounded-xl border border-yellow-200 bg-yellow-50 px-4 py-3 text-yellow-800">
+          <div className="mb-3 rounded-lg border border-yellow-200 bg-yellow-50 px-4 py-2 text-sm text-yellow-800">
             Doctor ID not found. Open this dashboard from doctor login flow.
           </div>
         ) : null}
 
-        <div className={dashboardStyles.statsGrid}>
-          <StatCard title="Total" value={total} icon={<Users />} />
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 mb-4">
+          <StatCard
+            title="Total"
+            value={total}
+            icon={<Users size={22} />}
+            color="bg-emerald-100 text-emerald-700"
+          />
+
           <StatCard
             title="Earnings"
             value={`₹${earnings}`}
-            icon={<BadgeIndianRupee />}
+            icon={<BadgeIndianRupee size={22} />}
+            color="bg-blue-100 text-blue-700"
           />
+
           <StatCard
             title="Completed"
             value={completed}
-            icon={<CheckCircle />}
+            icon={<CheckCircle size={22} />}
+            color="bg-purple-100 text-purple-700"
           />
+
           <StatCard
             title="Cancelled"
             value={cancelled}
-            icon={<XCircle />}
+            icon={<XCircle size={22} />}
+            color="bg-rose-100 text-rose-700"
           />
         </div>
 
-        <div className={dashboardStyles.cardsGrid}>
-          {loading ? (
-            <p>Loading...</p>
-          ) : sortedAppointments.length === 0 ? (
-            <p>No appointments found</p>
-          ) : (
-            sortedAppointments.map((appointment) => {
+        {loading ? (
+          <div className="rounded-xl bg-white p-5 text-center shadow-sm border border-slate-200">
+            Loading...
+          </div>
+        ) : sortedAppointments.length === 0 ? (
+          <div className="rounded-xl bg-white p-5 text-center shadow-sm border border-slate-200">
+            No appointments found
+          </div>
+        ) : (
+          <div className="grid sm:grid-cols-2 xl:grid-cols-3 gap-3">
+            {sortedAppointments.map((appointment) => {
               const canViewHistory =
                 appointment.status === "confirmed" &&
                 Boolean(appointment.patientId) &&
@@ -285,46 +308,78 @@ export default function DashboardPage() {
               return (
                 <div
                   key={appointment.id}
-                  className={dashboardStyles.appointmentCard}
+                  className="rounded-xl border border-slate-200 bg-white p-4 shadow-sm hover:shadow-md transition"
                 >
-                  <h3>{appointment.patient}</h3>
+                  <div className="flex items-start justify-between gap-3 mb-3">
+                    <div className="flex items-center gap-2">
+                      <div className="h-10 w-10 rounded-lg bg-emerald-50 flex items-center justify-center text-emerald-600">
+                        <UserRound size={20} />
+                      </div>
 
-                  <p>
-                    {appointment.age} yrs · {appointment.gender}
-                  </p>
+                      <div>
+                        <h3 className="font-bold text-slate-800 leading-tight">
+                          {appointment.patient}
+                        </h3>
+                        <p className="text-xs text-slate-500">
+                          {appointment.age || "N/A"} yrs ·{" "}
+                          {appointment.gender || "N/A"}
+                        </p>
+                      </div>
+                    </div>
 
-                  <p>{appointment.speciality}</p>
-
-                  <p>
-                    {formatDate(appointment.date)} • {formatTime(appointment.time)}
-                  </p>
-
-                  <p>₹{appointment.fee}</p>
-
-                  <div className="flex items-center gap-2">
-                    <Phone size={16} />
-                    <span>{appointment.mobile || "No mobile"}</span>
+                    <span
+                      className={`rounded-full px-2 py-1 text-[11px] font-semibold capitalize ${
+                        appointment.status === "confirmed"
+                          ? "bg-blue-50 text-blue-700"
+                          : appointment.status === "complete"
+                          ? "bg-green-50 text-green-700"
+                          : appointment.status === "cancelled"
+                          ? "bg-red-50 text-red-700"
+                          : "bg-yellow-50 text-yellow-700"
+                      }`}
+                    >
+                      {appointment.status}
+                    </span>
                   </div>
 
-                  <p className="mt-2 text-xs text-gray-500">
-                    PID: {appointment.patientId || "MISSING"}
-                  </p>
+                  <div className="space-y-2 text-sm text-slate-600">
+                    <p className="font-medium text-slate-700">
+                      {appointment.speciality || "Speciality N/A"}
+                    </p>
 
-                  <p className="text-xs text-gray-500">
-                    Unique ID: {appointment.patientUniqueId || "N/A"}
-                  </p>
+                    <div className="flex items-center gap-2">
+                      <CalendarDays size={15} className="text-blue-500" />
+                      <span>
+                        {formatDate(appointment.date)} •{" "}
+                        {formatTime(appointment.time)}
+                      </span>
+                    </div>
 
-                  <p className="text-xs capitalize mt-1 text-gray-500">
-                    Status: {appointment.status}
-                  </p>
+                    <div className="flex items-center gap-2">
+                      <Phone size={15} className="text-emerald-500" />
+                      <span>{appointment.mobile || "No mobile"}</span>
+                    </div>
+
+                    <div className="flex items-center justify-between rounded-lg bg-slate-50 px-3 py-2">
+                      <span className="text-xs text-slate-500">Fee</span>
+                      <span className="font-bold text-slate-800">
+                        ₹{appointment.fee}
+                      </span>
+                    </div>
+
+                    <div className="rounded-lg bg-cyan-50 px-3 py-2 text-xs text-slate-600">
+                      <p>PID: {appointment.patientId || "MISSING"}</p>
+                      <p>Unique ID: {appointment.patientUniqueId || "N/A"}</p>
+                    </div>
+                  </div>
 
                   <button
                     onClick={() => handleViewHistory(appointment)}
                     disabled={!canViewHistory}
-                    className={`mt-3 w-full rounded px-3 py-2 flex items-center justify-center gap-2 ${
+                    className={`mt-3 w-full rounded-lg px-3 py-2 text-sm font-semibold flex items-center justify-center gap-2 transition ${
                       canViewHistory
-                        ? "bg-blue-600 text-white hover:bg-blue-700"
-                        : "bg-gray-300 text-gray-500 cursor-not-allowed"
+                        ? "bg-blue-500 text-white hover:bg-blue-600"
+                        : "bg-slate-200 text-slate-500 cursor-not-allowed"
                     }`}
                   >
                     <FileText size={16} />
@@ -332,9 +387,9 @@ export default function DashboardPage() {
                   </button>
                 </div>
               );
-            })
-          )}
-        </div>
+            })}
+          </div>
+        )}
       </div>
     </div>
   );
@@ -342,15 +397,20 @@ export default function DashboardPage() {
 
 /* ================= STAT CARD ================= */
 
-function StatCard({ title, value, icon }) {
+function StatCard({ title, value, icon, color }) {
   return (
-    <div className={dashboardStyles.statCard}>
-      <div className="flex items-center justify-between">
+    <div className="rounded-xl bg-white p-4 shadow-sm border border-slate-200">
+      <div className="flex items-center justify-between gap-2">
         <div>
-          <p>{title}</p>
-          <h3>{value}</h3>
+          <p className="text-xs text-slate-500">{title}</p>
+          <h3 className="text-xl font-bold mt-1 text-slate-800">{value}</h3>
         </div>
-        {icon}
+
+        <div
+          className={`h-10 w-10 rounded-lg flex items-center justify-center ${color}`}
+        >
+          {icon}
+        </div>
       </div>
     </div>
   );
