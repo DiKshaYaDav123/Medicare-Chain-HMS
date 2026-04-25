@@ -125,6 +125,7 @@
 admin/
 frontend/
 backend/
+testing/
 ```
 
 > ⚠️ Folder structure is strictly maintained (no unnecessary refactoring)
@@ -144,6 +145,23 @@ backend/
 * ✅ Appointment Status Management
 * ✅ Hospital-based Data Security Logic
 * ✅ Dynamic UI (React + Tailwind)
+
+---
+
+## 🧪 Testing & QA
+
+This project includes structured testing documentation inside the testing folder.
+
+Testing files include:
+- Test cases
+- API testing (Postman)
+- Bug reports
+
+Testing types covered:
+- Functional testing
+- API testing
+- UI testing
+- Bug tracking
 
 ---
 
